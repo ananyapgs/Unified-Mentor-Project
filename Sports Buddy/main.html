@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Form</title>
+  <link rel = "stylesheet" href = "main.css">
+  <!-- Add Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.2/firebase-database.js"></script>
+  <!-- Initialize Firebase -->
+  <script>
+    const firebaseConfig = {
+      // Your Firebase config
+      apiKey: "AIzaSyD1_OKOT33hslC5zIqCMXsT3xB3VlOyB-I",
+      authDomain: "sports-buddy-4c6b1.firebaseapp.com",
+      databaseURL: "https://sports-buddy-4c6b1-default-rtdb.firebaseio.com",
+      projectId: "sports-buddy-4c6b1",
+      storageBucket: "sports-buddy-4c6b1.appspot.com",
+      messagingSenderId: "270725850993",
+      appId: "1:270725850993:web:5999824dd02dd3faf7b8d0"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    
+    // Function to handle form submission
+    function submitForm() {
+      const category = document.getElementById('category').value;
+      const area = document.getElementById('area').value;
+      const city = document.getElementById('city').value;
+      
+      // Get current user
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const userId = user.uid;
+        // Store data in Firebase database
+        database.ref('users/' + userId).push({
+          category: category,
+          area: area,
+          city: city
+        });
+      } else {
+        alert('Please log in to submit the form.');
+      }
+      
+      // Display entered details
+      document.getElementById('result').innerHTML = `
+        <p><strong>Category:</strong> ${category}</p>
+        <p><strong>Area:</strong> ${area}</p>
+        <p><strong>City:</strong> ${city}</p>
+      `;
+    }
+  </script>
+</head>
+<body>
+  <h1>Sports Form</h1>
+  <section id="event">
+    <h2>Event Details</h2>
+    <!-- Add income transaction form -->
+      <form>
+        <input type="text" id="event-category" placeholder="Category">
+        <input type="text" id="event-name" placeholder="Event Name">
+        <input type="text" id="event-city" placeholder="City"> 
+        <button>Submit</button> 
+      </form>
+  </section>
+  <div id="result"></div>
+  <script type = "module" src = "script.js"></script>
+</body>
+</html>
